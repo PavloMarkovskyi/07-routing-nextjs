@@ -14,6 +14,7 @@ export interface FetchNotesParams {
   page: number;
   perPage: number;
   search?: string;
+  tag: string;
 }
 
 export interface FetchNotesResponse {
@@ -31,6 +32,7 @@ export const fetchNotes = async ({
   page = 1,
   perPage = 12,
   search = '',
+  tag ='',
 }: Partial<FetchNotesParams> = {}): Promise<FetchNotesResponse> => {
   const params = new URLSearchParams({
     page: String(page),
@@ -40,7 +42,9 @@ export const fetchNotes = async ({
   if (search?.trim()) {
     params.append('search', search.trim());
   }
-
+  if (tag && tag !== 'All') {
+    params.append('tag', tag);
+  }
   const response = await axios.get<FetchNotesResponse>(
     `${BASE_URL}/notes?${params.toString()}`,
     getAuthHeaders()
