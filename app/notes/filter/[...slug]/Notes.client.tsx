@@ -10,7 +10,7 @@ import {
 import { fetchNotes, createNote, FetchNotesResponse } from '@/lib/api';
 import type { Note } from '@/types/note';
 import NoteList from '@/components/NoteList/NoteList';
-import NoteModal from '@/components/NoteModal/NoteModal';
+import Modal from '@/components/Modal/Modal';
 import Pagination from '@/components/Pagination/Pagination';
 import SearchBox from '@/components/SearchBox/SearchBox';
 import css from './NotesPage.module.css';
@@ -95,7 +95,7 @@ const NotesClient = ({ tag, initialData }: NotesClientProps) => {
       )}
 
       {isModalOpen && (
-        <NoteModal
+        <Modal
           onClose={() => setIsModalOpen(false)}
           onCreateNote={handleCreateNote}
         />

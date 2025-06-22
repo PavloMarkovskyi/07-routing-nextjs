@@ -3,7 +3,7 @@
 import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import NoteForm from '../NoteForm/NoteForm';
-import css from './NoteModal.module.css';
+import css from './Modal.module.css';
 import type { NewNotePayload } from '../../types/note';
 
 interface NoteModalProps {
@@ -11,7 +11,7 @@ interface NoteModalProps {
   onCreateNote: (note: NewNotePayload) => void;
 }
 
-const NoteModal = ({ onClose, onCreateNote }: NoteModalProps) => {
+const Modal = ({ onClose, onCreateNote }: NoteModalProps) => {
   useEffect(() => {
     const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
@@ -50,4 +50,4 @@ const NoteModal = ({ onClose, onCreateNote }: NoteModalProps) => {
   );
 };
 
-export default NoteModal;
+export default Modal;
