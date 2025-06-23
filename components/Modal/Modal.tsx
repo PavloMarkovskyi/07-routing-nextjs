@@ -2,28 +2,26 @@
 
 import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom';
-import NoteForm from '../NoteForm/NoteForm';
 import css from './Modal.module.css';
-import type { NewNotePayload } from '../../types/note';
 
-interface NoteModalProps {
+interface ModalProps {
   onClose: () => void;
-  onCreateNote: (note: NewNotePayload) => void;
+  children: React.ReactNode;
 }
 
-const Modal = ({ onClose, onCreateNote }: NoteModalProps) => {
+export default function Modal({ onClose, children }: ModalProps) {
   useEffect(() => {
     const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
 
-    const onKeyDown = (e: KeyboardEvent) => {
+    const handleEsc = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
     };
-    window.addEventListener('keydown', onKeyDown);
 
+    window.addEventListener('keydown', handleEsc);
     return () => {
       document.body.style.overflow = originalOverflow;
-      window.removeEventListener('keydown', onKeyDown);
+      window.removeEventListener('keydown', handleEsc);
     };
   }, [onClose]);
 
@@ -32,22 +30,9 @@ const Modal = ({ onClose, onCreateNote }: NoteModalProps) => {
   };
 
   return ReactDOM.createPortal(
-    <div
-      className={css.backdrop}
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="modal-title"
-      onClick={onBackdropClick}
-    >
-      <div className={css.modal}>
-        <h2 id="modal-title" className="visually-hidden">
-          Create Note
-        </h2>
-        <NoteForm onClose={onClose} onCreateNote={onCreateNote} />
-      </div>
+    <div className={css.backdrop} onClick={onBackdropClick}>
+      <div className={css.modal}>{children}</div>
     </div>,
     document.body
   );
-};
-
-export default Modal;
+}
