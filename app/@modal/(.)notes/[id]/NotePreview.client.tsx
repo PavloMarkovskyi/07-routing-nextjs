@@ -77,6 +77,7 @@ function NotePreview({ id, onClose }: NotePreviewProps) {
           marginTop: '16px',
         }}
       >
+        <p className={css.date}>{new Date(data.createdAt).toLocaleString()}</p>
         <span className={css.tag}>{data.tag}</span>
         <button
           className={css.backBtn}

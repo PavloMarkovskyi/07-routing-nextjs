@@ -104,7 +104,7 @@ const NoteForm = ({ onClose }: NoteFormProps) => {
           </ErrorMessage>
         </div>
 
-        <div className={css.buttons}>
+        <div className={css.actions}>
           <button
             type="submit"
             className={css.submitButton}

@@ -2,7 +2,7 @@ import css from '@/components/Footer/Footer.module.css';
 
 const Footer = () => {
   return (
-    <footer className={css.footer}>
+    <footer className={css.footer} aria-label="Footer">
       <div>
         <p>© {new Date().getFullYear()} NoteHub. All rights reserved.</p>
         <div className={css.wrap}>
