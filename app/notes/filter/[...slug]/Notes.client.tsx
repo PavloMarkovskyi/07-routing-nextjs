@@ -40,7 +40,7 @@ const NotesClient = ({ tag, initialData }: NotesClientProps) => {
         page,
         perPage: PER_PAGE,
         search: debouncedSearchTerm,
-        tag: tag === 'All' ? undefined : tag,
+        tag: tag?.toLowerCase() === 'all' || !tag?.trim() ? undefined : tag,
       }),
     staleTime: 1000 * 60 * 5,
     placeholderData: keepPreviousData,
@@ -82,8 +82,12 @@ const NotesClient = ({ tag, initialData }: NotesClientProps) => {
             onPageChange={(selectedPage: number) => setPage(selectedPage)}
           />
         )}
-        <button className={css.button} onClick={() => setIsModalOpen(true)}>
-          Create note +
+        <button
+          className={css.button}
+          onClick={() => setIsModalOpen(true)}
+          disabled={createMutation.isPending}
+        >
+          {createMutation.isPending ? 'Creating...' : 'Create note +'}
         </button>
       </header>
 

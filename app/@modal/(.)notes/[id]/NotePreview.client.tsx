@@ -1,29 +1,90 @@
 'use client';
 
-import { useParams } from 'next/navigation';
-import { useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
+import {
+  QueryClient,
+  QueryClientProvider,
+  HydrationBoundary,
+  useQuery,
+} from '@tanstack/react-query';
+import Modal from '@/components/Modal/Modal';
 import { fetchNoteById } from '@/lib/api';
+import { useRouter } from 'next/navigation';
 import css from './NotePreview.module.css';
 
-export default function NotePreview() {
-  const { id } = useParams();
-  const noteId = Number(id);
+interface NotePreviewModalProps {
+  id: number;
+  dehydratedState: unknown;
+}
+
+export default function NotePreviewModal({
+  id,
+  dehydratedState,
+}: NotePreviewModalProps) {
+  const [queryClient] = useState(() => new QueryClient());
+  const router = useRouter();
+
+  const handleClose = () => router.back();
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <HydrationBoundary state={dehydratedState}>
+        <Modal onClose={handleClose}>
+          <NotePreview id={id} onClose={handleClose} />
+        </Modal>
+      </HydrationBoundary>
+    </QueryClientProvider>
+  );
+}
+
+interface NotePreviewProps {
+  id: number;
+  onClose: () => void;
+}
+
+function NotePreview({ id, onClose }: NotePreviewProps) {
+  const router = useRouter();
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: ['note', noteId],
-    queryFn: () => fetchNoteById(noteId),
-    enabled: !!noteId,
+    queryKey: ['note', id],
+    queryFn: () => fetchNoteById(id),
+    enabled: !!id,
+    refetchOnMount: false,
   });
 
-  if (!noteId) return <p>Invalid note ID</p>;
   if (isLoading) return <p>Loading...</p>;
   if (isError || !data) return <p>Note not found</p>;
 
   return (
-    <div className={css.preview}>
-      <h2>{data.title}</h2>
-      <p>{data.content}</p>
-      <span className={css.tag}>{data.tag}</span>
+    <div className={css.container}>
+      <div className={css.header}>
+        <h2>{data.title}</h2>
+        <button onClick={onClose} className={css.backBtn}>
+          ✖
+        </button>
+      </div>
+
+      <div className={css.content}>
+        {data.content.length > 150
+          ? `${data.content.slice(0, 150)}...`
+          : data.content}
+      </div>
+
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          marginTop: '16px',
+        }}
+      >
+        <span className={css.tag}>{data.tag}</span>
+        <button
+          className={css.backBtn}
+          onClick={() => router.push(`/notes/${id}`)}
+        >
+          Детальніше →
+        </button>
+      </div>
     </div>
   );
 }

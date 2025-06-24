@@ -32,19 +32,16 @@ export const fetchNotes = async ({
   page = 1,
   perPage = 12,
   search = '',
-  tag ='',
+  tag,
 }: Partial<FetchNotesParams> = {}): Promise<FetchNotesResponse> => {
   const params = new URLSearchParams({
     page: String(page),
     perPage: String(perPage),
   });
 
-  if (search?.trim()) {
-    params.append('search', search.trim());
-  }
-  if (tag && tag !== 'All') {
-    params.append('tag', tag);
-  }
+  if (search.trim()) params.append('search', search.trim());
+  if (tag) params.append('tag', tag);
+
   const response = await axios.get<FetchNotesResponse>(
     `${BASE_URL}/notes?${params.toString()}`,
     getAuthHeaders()
@@ -80,15 +77,3 @@ export const fetchNoteById = async (id: number): Promise<Note> => {
   );
   return response.data;
 };
-
-// export const updateNote = async (
-//   id: number,
-//   updates: Partial<NewNotePayload>
-// ): Promise<Note> => {
-//   const response = await axios.patch<Note>(
-//     `${BASE_URL}/notes/${id}`,
-//     updates,
-//     getAuthHeaders()
-//   );
-//   return response.data;
-// };
