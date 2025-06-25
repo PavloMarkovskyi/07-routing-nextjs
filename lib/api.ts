@@ -1,6 +1,7 @@
 import axios from 'axios';
 import type { Note } from '../types/note';
 
+
 const BASE_URL = 'https://notehub-public.goit.study/api';
 const token = process.env.NEXT_PUBLIC_NOTEHUB_TOKEN;
 
@@ -11,10 +12,10 @@ const getAuthHeaders = () => ({
 });
 
 export interface FetchNotesParams {
-  page: number;
-  perPage: number;
+  page?: number;
+  perPage?: number;
   search?: string;
-  tag: string;
+  tag?: string;
 }
 
 export interface FetchNotesResponse {

@@ -2,8 +2,7 @@
 
 import { useState } from 'react';
 import css from './TagsMenu.module.css';
-
-const TAGS = ['All', 'Todo', 'Work', 'Personal', 'Meeting', 'Shopping'];
+import { TAGS } from '@/lib/constants';
 
 export default function TagsMenu() {
   const [isOpen, setIsOpen] = useState(false);
