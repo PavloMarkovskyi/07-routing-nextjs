@@ -16,7 +16,6 @@ export default function NotePreviewModal({ id }: NotePreviewModalProps) {
   const { data, isLoading, isError } = useQuery({
     queryKey: ['note', id],
     queryFn: () => fetchNoteById(id),
-    enabled: !!id,
     refetchOnMount: false,
   });
 
@@ -47,9 +46,6 @@ export default function NotePreviewModal({ id }: NotePreviewModalProps) {
             {new Date(data.createdAt).toLocaleString()}
           </p>
           <span className={css.tag}>{data.tag}</span>
-          <button className={css.backBtn} onClick={handleClose}>
-            Close
-          </button>
         </div>
       </div>
     </Modal>
