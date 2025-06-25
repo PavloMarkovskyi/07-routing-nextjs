@@ -72,7 +72,7 @@ function NoteContent({ id, onClose }: NoteContentProps) {
         <p className={css.date}>{new Date(data.createdAt).toLocaleString()}</p>
         <span className={css.tag}>{data.tag}</span>
         <button className={css.backBtn} onClick={onClose}>
-          Закрити
+          Close
         </button>
       </div>
     </div>
