@@ -2,14 +2,14 @@
 
 import { useState } from 'react';
 import {
+  HydrationBoundary,
   QueryClient,
   QueryClientProvider,
-  HydrationBoundary,
   useQuery,
 } from '@tanstack/react-query';
-import Modal from '@/components/Modal/Modal';
 import { fetchNoteById } from '@/lib/api';
 import { useRouter } from 'next/navigation';
+import Modal from '@/components/Modal/Modal';
 import css from './NotePreview.module.css';
 
 interface NotePreviewModalProps {
@@ -30,21 +30,19 @@ export default function NotePreviewModal({
     <QueryClientProvider client={queryClient}>
       <HydrationBoundary state={dehydratedState}>
         <Modal onClose={handleClose}>
-          <NotePreview id={id} onClose={handleClose} />
+          <NoteContent id={id} onClose={handleClose} />
         </Modal>
       </HydrationBoundary>
     </QueryClientProvider>
   );
 }
 
-interface NotePreviewProps {
+interface NoteContentProps {
   id: number;
   onClose: () => void;
 }
 
-function NotePreview({ id, onClose }: NotePreviewProps) {
-  const router = useRouter();
-
+function NoteContent({ id, onClose }: NoteContentProps) {
   const { data, isLoading, isError } = useQuery({
     queryKey: ['note', id],
     queryFn: () => fetchNoteById(id),
@@ -70,20 +68,11 @@ function NotePreview({ id, onClose }: NotePreviewProps) {
           : data.content}
       </div>
 
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          marginTop: '16px',
-        }}
-      >
+      <div className={css.footer}>
         <p className={css.date}>{new Date(data.createdAt).toLocaleString()}</p>
         <span className={css.tag}>{data.tag}</span>
-        <button
-          className={css.backBtn}
-          onClick={() => router.push(`/notes/${id}`)}
-        >
-          Детальніше →
+        <button className={css.backBtn} onClick={onClose}>
+          Закрити
         </button>
       </div>
     </div>

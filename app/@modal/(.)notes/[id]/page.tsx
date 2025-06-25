@@ -7,9 +7,8 @@ interface PageProps {
 }
 
 export default async function NotePreviewModalPage({ params }: PageProps) {
-  const resolvedParams = await params;
-  const noteId = Number(resolvedParams.id);
-
+  const { id } = await params;
+  const noteId = Number(id);
   if (isNaN(noteId)) throw new Error('Invalid note ID');
 
   const queryClient = new QueryClient();
@@ -19,7 +18,7 @@ export default async function NotePreviewModalPage({ params }: PageProps) {
     queryFn: () => fetchNoteById(noteId),
   });
 
-  return (
-    <NotePreviewModal id={noteId} dehydratedState={dehydrate(queryClient)} />
-  );
+  const dehydratedState = dehydrate(queryClient);
+
+  return <NotePreviewModal id={noteId} dehydratedState={dehydratedState} />;
 }
